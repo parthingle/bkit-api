@@ -1,0 +1,26 @@
+{
+  "name": "bkit-api",
+  "version": "1.0.0",
+  "description": "backedn for bkit-app",
+  "main": "index.js",
+  "repository": "https://github.com/parthingle/bkit-api.git",
+  "author": "TeamBruinmeet",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "express-unless": "^0.5.0",
+    "firebase-admin": "^7.2.0",
+    "http": "^0.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^1.18.10",
+    "passport": "^0.4.0",
+    "passport-facebook-token": "^3.3.0"
+  },
+  "scripts": {
+    "start": "node_modules/.bin/nodemon app.js --exec babel-node --"
+  }
+}

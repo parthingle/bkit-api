@@ -1,7 +1,7 @@
-import express from 'express'
+import express from 'express';
+import fbAuth from './fbauth'
+
 const router = express.Router()
 
-router.use('/auth')
-
-
+router.use('/auth', fbAuth)
 export default router

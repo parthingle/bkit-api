@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 
 app.get('/status', (req, res) => {
-  res.status(200).send("{message: Listening}")
+  res.status(200).send({message: "Listening"})
 })
 app.use(passport.initialize());
 FB.setStrategy()

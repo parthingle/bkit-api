@@ -10,6 +10,6 @@ admin.initializeApp({
   });
 
 const db = admin.firestore()
-const USERS = db.collection('Users')
+export const USERS = db.collection('Users')
 // Add other firebase related exports here
-export default { db, USERS }
+export default db

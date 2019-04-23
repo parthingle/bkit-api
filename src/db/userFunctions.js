@@ -53,15 +53,13 @@ export const getPublicProfile = async (req, res, next) => {
 
 export const resolveUserBuckets = async (req, res, next) => {
     var err,
-        Buckets = [];
+        Buckets = [],
+        temp;
     try {
-        Promise.all(res.locals.User.myBuckets.map(b => b.get())).then(
-            buckets => {
-                buckets.map(bucket => {
-                    Buckets.push(bucket.data());
-                });
-            }
-        );
+        temp = await Promise.all(res.locals.User.myBuckets.map(b => b.get()));
+        temp.map(bucket => {
+            Buckets.push(bucket.data());
+        });
         res.locals.User.myBuckets = Buckets;
     } catch (error) {
         err = error;
@@ -70,25 +68,22 @@ export const resolveUserBuckets = async (req, res, next) => {
     next();
 };
 
-export const resolveUserBucketItems = async (req, res) => {
+export const resolveUserBucketItems = async (req, res, next) => {
     var err,
-        BucketItems = [];
+        BucketItems = [],
+        temp;
 
     try {
-        res.locals.User.myBucketItems.forEach(bucketItems => {
-            bucketItems
-                .get()
-                .then(bi => {
-                    BucketItems.push(bi.data());
-                })
-                .catch(error => {
-                    throw error;
-                });
+        temp = await Promise.all(
+            res.locals.User.myBucketItems.map(bi => bi.get())
+        );
+        temp.map(bi => {
+            BucketItems.push(bi.data());
         });
+        res.locals.User.myBucketItems = BucketItems;
     } catch (error) {
         err = error;
         throw error;
     }
-    res.locals.User.myBucketItems = BucketItems;
     next();
 };

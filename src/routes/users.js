@@ -8,7 +8,7 @@ userRouter.get(
     "/my/:id",
     Users.getMyProfile,
     Users.resolveUserBuckets,
-    // Users.resolveUserBucketItems,
+    Users.resolveUserBucketItems,
 
     (req, res) => {
         if (res.locals.User === null) {

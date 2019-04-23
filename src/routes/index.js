@@ -5,7 +5,7 @@ import bucketRouter from "./buckets";
 
 const router = express.Router();
 
-router.use('/auth', fbAuth);
-router.use('/user', userRouter);
-router.use('/bucket', bucketRouter);
+router.use("/auth", fbAuth);
+router.use("/user", userRouter);
+router.use("/bucket", bucketRouter);
 export default router;

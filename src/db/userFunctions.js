@@ -4,7 +4,11 @@ export const getMyProfile = async (req, res, next) => {
     var err, User, userSnapshot;
 
     try {
-        userSnapshot = await USERS.where('profileId', '==', req.params.id).get();
+        userSnapshot = await USERS.where(
+            "profileId",
+            "==",
+            req.params.id
+        ).get();
         if (userSnapshot.empty) {
             User = null;
         } else {
@@ -13,15 +17,19 @@ export const getMyProfile = async (req, res, next) => {
     } catch (error) {
         err = error;
     }
-    res.locals.User = User
+    res.locals.User = User;
     next(err, User);
-}
+};
 
 export const getPublicProfile = async (req, res, next) => {
     var err, User, fullUser, userSnapshot;
 
     try {
-        userSnapshot = await USERS.where('profileId', '==', req.params.id).get();
+        userSnapshot = await USERS.where(
+            "profileId",
+            "==",
+            res.locals.params.id
+        ).get();
         if (userSnapshot.empty) {
             User = null;
         } else {
@@ -33,50 +41,57 @@ export const getPublicProfile = async (req, res, next) => {
                 bio: fullUser.bio,
                 myBuckets: fullUser.myBuckets,
                 myBucketItems: fullUser.myBucketItems
-            }
+            };
         }
     } catch (error) {
         err = error;
     }
-    res.locals.User = User
+    res.locals.User = User;
     next(err, User);
-}
+};
 
 export const resolveUserBuckets = async (req, res, next) => {
-    var err, Buckets = [];
-
+    var err,
+        Buckets = [];
+    console.log(res.locals.User);
     try {
-        res.locals.User.myBuckets.forEach((bucket) => {
-            bucket.get()
-                .then((b) => {
+        res.locals.User.myBuckets.forEach(bucket => {
+            bucket
+                .get()
+                .then(b => {
                     Buckets.push(b.data());
                 })
-                .catch((error) => {
-                    throw error
-                })
-        })
+                .catch(error => {
+                    throw error;
+                });
+        });
     } catch (error) {
         err = error;
-        throw error;
+        // throw error;
     }
     res.locals.User.myBuckets = Buckets;
     next(err, User);
-}
+};
 
 export const resolveUserBucketItems = async (req, res) => {
-    var err, BucketItems = [];
+    var err,
+        BucketItems = [];
 
     try {
-        res.locals.User.myBucketItems.forEach((bucketItems) => {
-            bucketItems.get()
-                .then((bi) => {
+        res.locals.User.myBucketItems.forEach(bucketItems => {
+            bucketItems
+                .get()
+                .then(bi => {
                     BucketItems.push(bi.data());
                 })
-        })
+                .catch(error => {
+                    //   throw error;
+                });
+        });
     } catch (error) {
         err = error;
-        throw error;
+        // throw error;
     }
     res.locals.User.myBucketItems = BucketItems;
-    next(err, User)
-}
+    next(err, User);
+};

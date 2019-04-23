@@ -1,6 +1,6 @@
 import passport from 'passport';
 import * as JWT from '../auth/jwt';
-const ignoreAuthCheckPaths = ['/auth/facebook', '/user/my/:id'];
+const ignoreAuthCheckPaths = ['/auth/facebook', '/user/my/:id', '/user/public/:id', '/bucket/get/:id'];
 
 
 // Route

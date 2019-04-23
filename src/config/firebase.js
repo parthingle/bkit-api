@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
-import keys from './keys'
-import serviceAccount from './serviceAccountKey.json'
+import keys from "./keys";
+import serviceAccount from "./serviceAccountKey.json";
 
 
 // TODO: Use database from environment variables instead of being hardcoded
@@ -9,7 +9,9 @@ admin.initializeApp({
     databaseURL: keys.DATABASE_URL
   });
 
-const db = admin.firestore()
-export const USERS = db.collection('Users')
-// Add other firebase related exports here
+const db = admin.firestore();
+export const USERS = db.collection('Users');
+export const BUCKETS = db.collection('Buckets');
+export const ITEMS = db.collection('BucketItems');
+
 export default db

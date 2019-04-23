@@ -3,20 +3,30 @@ import * as Users from "../db/userFunctions";
 
 const userRouter = express.Router()
 
-userRouter.get("/my/:id", Users.getMyProfile, (req, res) => {
-    if (req.User === null) {
+userRouter.get("/my/:id",   
+    Users.getMyProfile, 
+    Users.resolveUserBuckets,
+    Users.resolveUserBucketItems, 
+
+    (req, res) => {
+    if (res.locals.User === null) {
         res.status(404).send("User not found!");
     } else {
-        res.status(200).send(req.User);
+        res.status(200).send(res.locals.User);
     }
     return;
 });
 
-userRouter.get("/public/:id", Users.getPublicProfile, (req, res) => {
-    if (req.User === null) {
+userRouter.get("/public/:id", 
+    Users.getPublicProfile, 
+    Users.resolveUserBuckets,
+    Users.resolveUserBucketItems,
+    
+    (req, res) => {
+    if (res.locals.User === null) {
         res.status(404).send("User not found!");
     } else {
-        res.status(200).send(req.User);
+        res.status(200).send(res.locals.User);
     }
     return;
 })

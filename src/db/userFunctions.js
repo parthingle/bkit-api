@@ -1,4 +1,5 @@
 import { USERS, BUCKETS, ITEMS } from "../config/firebase";
+import { Bucket } from "@google-cloud/storage";
 
 export const getMyProfile = async (req, res, next) => {
     var err, User, userSnapshot;
@@ -18,7 +19,7 @@ export const getMyProfile = async (req, res, next) => {
         err = error;
     }
     res.locals.User = User;
-    next(err, User);
+    next();
 };
 
 export const getPublicProfile = async (req, res, next) => {
@@ -53,24 +54,20 @@ export const getPublicProfile = async (req, res, next) => {
 export const resolveUserBuckets = async (req, res, next) => {
     var err,
         Buckets = [];
-    console.log(res.locals.User);
     try {
-        res.locals.User.myBuckets.forEach(bucket => {
-            bucket
-                .get()
-                .then(b => {
-                    Buckets.push(b.data());
-                })
-                .catch(error => {
-                    throw error;
+        Promise.all(res.locals.User.myBuckets.map(b => b.get())).then(
+            buckets => {
+                buckets.map(bucket => {
+                    Buckets.push(bucket.data());
                 });
-        });
+            }
+        );
+        res.locals.User.myBuckets = Buckets;
     } catch (error) {
         err = error;
-        // throw error;
+        throw error;
     }
-    res.locals.User.myBuckets = Buckets;
-    next(err, User);
+    next();
 };
 
 export const resolveUserBucketItems = async (req, res) => {
@@ -85,13 +82,13 @@ export const resolveUserBucketItems = async (req, res) => {
                     BucketItems.push(bi.data());
                 })
                 .catch(error => {
-                    //   throw error;
+                    throw error;
                 });
         });
     } catch (error) {
         err = error;
-        // throw error;
+        throw error;
     }
     res.locals.User.myBucketItems = BucketItems;
-    next(err, User);
+    next();
 };

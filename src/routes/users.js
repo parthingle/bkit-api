@@ -7,8 +7,8 @@ const userRouter = express.Router();
 userRouter.get(
     "/my/:id",
     Users.getMyProfile,
-    //   Users.resolveUserBuckets,
-    //   Users.resolveUserBucketItems,
+    Users.resolveUserBuckets,
+    // Users.resolveUserBucketItems,
 
     (req, res) => {
         if (res.locals.User === null) {

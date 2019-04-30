@@ -5,7 +5,7 @@ export const getMyProfile = async (req, res, next) => {
     var err, User, userSnapshot;
 
     try {
-        userSnapshot = await USERS.doc("Users/" + req.params.id).get();
+        userSnapshot = await USERS.doc("Users/" + req.auth.id).get();
         if (userSnapshot.empty) {
             User = null;
         } else {

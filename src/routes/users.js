@@ -5,7 +5,7 @@ import db from "../config/firebase";
 const userRouter = express.Router();
 
 userRouter.get(
-    "/my/:id",
+    "/my",
     Users.getMyProfile,
     Users.resolveUserBuckets,
     Users.resolveUserBucketItems,

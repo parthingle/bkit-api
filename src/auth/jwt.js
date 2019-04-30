@@ -24,6 +24,7 @@ export const sendToken = (req, res) => {
     res.status(200).send({ jwtoken: req.token });
 };
 
+// This implicitly puts the user id into req.auth
 export const authenticateUser = expressJwt({
     secret: keys.JWT_SECRET,
     requestProperty: "auth",

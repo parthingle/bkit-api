@@ -5,7 +5,7 @@ import keys from "../config/keys";
 export const createToken = userID => {
     return jwt.sign(
         {
-            id: userID.id
+            id: userID
         },
         keys.JWT_SECRET,
         {

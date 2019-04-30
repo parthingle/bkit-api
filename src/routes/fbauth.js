@@ -3,6 +3,7 @@ import * as JWT from "../auth/jwt";
 import * as Users from "../db/userFunctions";
 const ignoreAuthCheckPaths = [
     "/auth/facebook",
+    "/auth/signup",
     "/user/my/:id",
     "/user/public/:id",
     "/bucket/get/:id"
@@ -14,7 +15,7 @@ fbRouter.use(JWT.authenticateUser.unless({ path: ignoreAuthCheckPaths }));
 
 // Login endpoint
 fbRouter.get(
-    "/auth/facebook",
+    "/facebook",
     // First verify if accessToken is valid (verify_callback: src/auth/fb.js:18)
     passport.authenticate("facebook-token", { session: false }),
 
@@ -29,23 +30,22 @@ fbRouter.get(
 
 // Expects a user object in `req.params.user`
 fbRouter.post(
-    "/auth/signup",
+    "/signup",
     Users.newUser,
     (req, res, next) => {
         // jws.js expects there to be something in req.user so we have to update that field
-        req.user = req.locals.newUser;
+        req.user = res.locals.newUser;
         next();
     },
     JWT.generateToken,
     (req, res, next) => {
         // generateToken populates req.token
-        res.status(201).send(req.token);
-        next();
+        res.status(201).end(req.token);
     }
 );
 
 fbRouter.get(
-    "/auth/status",
+    "/status",
     passport.authenticate("facebook-token", { session: false }),
     (req, res, next) => {
         res.send(req.user ? 200 : 401);

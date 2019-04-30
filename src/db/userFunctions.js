@@ -99,6 +99,6 @@ export const newUser = async (req, res, next) => {
     } catch (error) {
         throw error;
     }
-    req.locals.newUser = newUser;
+    res.locals.newUser = newUser;
     next();
 };

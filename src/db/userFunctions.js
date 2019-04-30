@@ -87,3 +87,18 @@ export const resolveUserBucketItems = async (req, res, next) => {
     }
     next();
 };
+
+export const newUser = async (req, res, next) => {
+    var newUser;
+    try {
+        // doc() creates a document with the given identifier
+        // set() updates documents
+        newUser = await USERS.doc(req.body.user.profileId).set({
+            data: req.body.user
+        });
+    } catch (error) {
+        throw error;
+    }
+    req.locals.newUser = newUser;
+    next();
+};

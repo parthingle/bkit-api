@@ -44,12 +44,8 @@ fbRouter.post(
     }
 );
 
-fbRouter.get(
-    "/status",
-    passport.authenticate("facebook-token", { session: false }),
-    (req, res, next) => {
-        res.send(req.user ? 200 : 401);
-    }
-);
+fbRouter.get("/status", (req, res, next) => {
+    res.send(req.user ? 200 : 401);
+});
 
 module.exports = fbRouter;

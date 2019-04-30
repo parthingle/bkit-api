@@ -5,15 +5,11 @@ export const getMyProfile = async (req, res, next) => {
     var err, User, userSnapshot;
 
     try {
-        userSnapshot = await USERS.where(
-            "profileId",
-            "==",
-            req.params.id
-        ).get();
+        userSnapshot = await USERS.doc("Users/" + req.params.id).get();
         if (userSnapshot.empty) {
             User = null;
         } else {
-            User = userSnapshot.docs[0].data();
+            User = userSnapshot.data();
         }
     } catch (error) {
         err = error;
@@ -26,15 +22,11 @@ export const getPublicProfile = async (req, res, next) => {
     var err, User, fullUser, userSnapshot;
 
     try {
-        userSnapshot = await USERS.where(
-            "profileId",
-            "==",
-            res.locals.params.id
-        ).get();
+        userSnapshot = await USERS.doc("Users/" + req.params.id).get();
         if (userSnapshot.empty) {
             User = null;
         } else {
-            fullUser = userSnapshot.docs[0].data();
+            fullUser = userSnapshot.data();
             User = {
                 firstName: fullUser.firstName,
                 lastName: fullUser.lastName,

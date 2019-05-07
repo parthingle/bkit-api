@@ -2,7 +2,7 @@ import passport from "passport";
 import * as JWT from "../auth/jwt";
 import keys from "../config/keys";
 import unless from "express-unless";
-var FacebookTokenStrategy = require("passport-facebook-token");
+const FacebookTokenStrategy = require("passport-facebook-token");
 
 JWT.authenticateUser.unless = unless;
 

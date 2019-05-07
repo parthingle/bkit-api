@@ -9,7 +9,7 @@ export const createToken = userID => {
         },
         keys.JWT_SECRET,
         {
-            expiresIn: 60 * 120
+            expiresIn: "120m"
         }
     );
 };

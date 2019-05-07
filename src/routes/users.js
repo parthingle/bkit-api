@@ -11,11 +11,7 @@ userRouter.get(
     Users.resolveUserBucketItems,
 
     (req, res) => {
-        if (res.locals.User === null) {
-            res.status(404).send("User not found!");
-        } else {
-            res.status(200).send(res.locals.User);
-        }
+        res.status(200).send(res.locals.user);
         return;
     }
 );
@@ -26,11 +22,7 @@ userRouter.get(
     Users.resolveUserBucketItems,
 
     (req, res) => {
-        if (res.locals.User === null) {
-            res.status(404).send("User not found!");
-        } else {
-            res.status(200).send(res.locals.User);
-        }
+        res.status(200).send(res.locals.user);
         return;
     }
 );

@@ -1,37 +1,33 @@
 import { BUCKETS, ITEMS } from "../config/firebase";
 
 export const getBucket = async (req, res, next) => {
-    var Bucket, bucketSnapshot;
+    let bucket, bucketSnapshot;
     try {
-        bucketSnapshot = await BUCKETS.where(
-            "bucketId",
-            "==",
-            req.params.id
-        ).get();
-        if (bucketSnapshot.empty) {
-            Bucket = null;
+        bucketSnapshot = await BUCKETS.doc(req.params.id).get();
+        if (!bucketSnapshot.exists) {
+            res.status(404).json({ message: "Bucket not found!" });
+            return;
         } else {
-            Bucket = bucketSnapshot.docs[0].data();
+            bucket = bucketSnapshot.data();
         }
     } catch (error) {
         next(error);
+        return;
     }
-    res.locals.Bucket = Bucket;
+    res.locals.bucket = bucket;
     next();
 };
 
 export const resolveBucketItems = async (req, res, next) => {
-    var err,
-        BucketItems = [];
+    let bucketItems;
     try {
-        res.locals.Bucket.bucketItems.forEach(item => {
-            item.get().then(bi => {
-                BucketItems.push(bi.data());
-            });
-        });
+        bucketItems = (await Promise.all(
+            res.locals.bucket.bucketItems.map(bi => bi.get())
+        )).map(bi => bi.data());
     } catch (error) {
         next(error);
+        return;
     }
-    res.locals.Bucket.bucketItems = BucketItems;
+    res.locals.bucket.bucketItems = bucketItems;
     next();
 };

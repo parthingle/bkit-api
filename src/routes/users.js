@@ -22,8 +22,8 @@ userRouter.get(
 userRouter.get(
     "/public/:id",
     Users.getPublicProfile,
-    //   Users.resolveUserBuckets,
-    //   Users.resolveUserBucketItems,
+    Users.resolveUserBuckets,
+    Users.resolveUserBucketItems,
 
     (req, res) => {
         if (res.locals.User === null) {

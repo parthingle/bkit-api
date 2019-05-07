@@ -37,45 +37,39 @@ export const getPublicProfile = async (req, res, next) => {
             };
         }
     } catch (error) {
-        err = error;
+        next(error);
     }
     res.locals.User = User;
-    next(err, User);
+    next();
 };
 
 export const resolveUserBuckets = async (req, res, next) => {
-    var err,
-        Buckets = [],
+    var Buckets = [],
         temp;
     try {
-        temp = await Promise.all(res.locals.User.myBuckets.map(b => b.get()));
-        temp.map(bucket => {
+        (await Promise.all(
+            res.locals.User.myBuckets.map(b => b.get())
+        )).forEach(bucket => {
             Buckets.push(bucket.data());
         });
         res.locals.User.myBuckets = Buckets;
     } catch (error) {
-        err = error;
-        throw error;
+        next(error);
     }
     next();
 };
 
 export const resolveUserBucketItems = async (req, res, next) => {
-    var err,
-        BucketItems = [],
+    var BucketItems = [],
         temp;
 
     try {
         temp = await Promise.all(
             res.locals.User.myBucketItems.map(bi => bi.get())
         );
-        temp.map(bi => {
-            BucketItems.push(bi.data());
-        });
-        res.locals.User.myBucketItems = BucketItems;
+        res.locals.User.myBucketItems = temp.map(bi => bi.data());
     } catch (error) {
-        err = error;
-        throw error;
+        next(error);
     }
     next();
 };
@@ -89,7 +83,7 @@ export const newUser = async (req, res, next) => {
             data: req.body.user
         });
     } catch (error) {
-        throw error;
+        next(error);
     }
     res.locals.newUser = newUser;
     next();

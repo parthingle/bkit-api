@@ -1,7 +1,7 @@
 import { BUCKETS, ITEMS } from "../config/firebase";
 
 export const getBucket = async (req, res, next) => {
-    var Bucket, bucketSnapshot, err;
+    var Bucket, bucketSnapshot;
     try {
         bucketSnapshot = await BUCKETS.where(
             "bucketId",
@@ -14,11 +14,10 @@ export const getBucket = async (req, res, next) => {
             Bucket = bucketSnapshot.docs[0].data();
         }
     } catch (error) {
-        err = error;
-        throw error;
+        next(error);
     }
     res.locals.Bucket = Bucket;
-    next(err, Bucket);
+    next();
 };
 
 export const resolveBucketItems = async (req, res, next) => {
@@ -31,9 +30,8 @@ export const resolveBucketItems = async (req, res, next) => {
             });
         });
     } catch (error) {
-        err = error;
-        throw error;
+        next(error);
     }
     res.locals.Bucket.bucketItems = BucketItems;
-    next(err, BucketItems);
+    next();
 };

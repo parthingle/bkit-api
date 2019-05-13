@@ -1,14 +1,17 @@
-import jwt from 'jsonwebtoken';
-import expressJwt from 'express-jwt';
-import keys from '../config/keys'
+import jwt from "jsonwebtoken";
+import expressJwt from "express-jwt";
+import keys from "../config/keys";
 
-export const createToken = (userID) => {
-    return jwt.sign({
-        id: userID.id
-    }, keys.JWT_SECRET,
+export const createToken = userID => {
+    return jwt.sign(
         {
-            expiresIn: 60 * 120
-        });
+            id: userID
+        },
+        keys.JWT_SECRET,
+        {
+            expiresIn: "120m"
+        }
+    );
 };
 
 export const generateToken = (req, res, next) => {
@@ -17,18 +20,19 @@ export const generateToken = (req, res, next) => {
 };
 
 export const sendToken = (req, res) => {
-    res.setHeader('x-auth-token', req.token);
-    res.status(200).send({ jwtoken: req.token })
+    res.setHeader("x-auth-token", req.token);
+    res.status(200).send({ jwtoken: req.token });
 };
 
+// This implicitly puts the user id into req.auth
 export const authenticateUser = expressJwt({
     secret: keys.JWT_SECRET,
-    requestProperty: 'auth',
-    getToken: (req) => {
-        if (req.headers['x-auth-token']) {
-            return (req.headers['x-auth-token']);
+    requestProperty: "auth",
+    getToken: req => {
+        if (req.headers["x-auth-token"]) {
+            return req.headers["x-auth-token"];
         }
-        console.log("not authorized")
+        console.log("Not authorized!");
         return null;
     }
 });

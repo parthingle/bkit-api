@@ -8,7 +8,7 @@ userRouter.get(
     "/my",
     Users.getMyProfile,
     Users.resolveUserBuckets,
-    Users.resolveUserBucketItems,
+    Users.resolveUserItems,
 
     (req, res) => {
         res.status(200).send(res.locals.user);
@@ -19,7 +19,7 @@ userRouter.get(
     "/public/:id",
     Users.getPublicProfile,
     Users.resolveUserBuckets,
-    Users.resolveUserBucketItems,
+    Users.resolveUserItems,
 
     (req, res) => {
         res.status(200).send(res.locals.user);

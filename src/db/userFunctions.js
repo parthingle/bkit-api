@@ -34,7 +34,7 @@ export const getPublicProfile = async (req, res, next) => {
                 profilePic: fullUser.profilePic,
                 bio: fullUser.bio,
                 myBuckets: fullUser.myBuckets,
-                myBucketItems: fullUser.myBucketItems
+                myItems: fullUser.myItems
             };
         }
     } catch (error) {
@@ -59,17 +59,17 @@ export const resolveUserBuckets = async (req, res, next) => {
     next();
 };
 
-export const resolveUserBucketItems = async (req, res, next) => {
-    let myBucketItems;
+export const resolveUserItems = async (req, res, next) => {
+    let myItems;
     try {
-        myBucketItems = (await Promise.all(
-            res.locals.user.myBucketItems.map(bi => bi.get())
+        myItems = (await Promise.all(
+            res.locals.user.myItems.map(bi => bi.get())
         )).map(bi => bi.data());
     } catch (error) {
         next(error);
         return;
     }
-    res.locals.user.myBucketItems = myBucketItems;
+    res.locals.user.myItems = myItems;
     next();
 };
 

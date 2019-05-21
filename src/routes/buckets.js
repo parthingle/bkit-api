@@ -5,9 +5,9 @@ import * as Users from "../db/userFunctions";
 const bucketRouter = express.Router();
 
 bucketRouter.get(
-    "/get/:id",
+    "/:id",
     Buckets.getBucket,
-    Buckets.resolveBucketItems,
+    Buckets.resolveItems,
     (req, res) => {
         res.status(200).send(res.locals.bucket);
         return;

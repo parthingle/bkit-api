@@ -17,6 +17,8 @@
     "firebase-admin": "^7.2.0",
     "http": "^0.0.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0"

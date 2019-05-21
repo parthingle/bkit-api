@@ -11,6 +11,6 @@ admin.initializeApp({
 const db = admin.firestore();
 export const USERS = db.collection("Users");
 export const BUCKETS = db.collection("Buckets");
-export const ITEMS = db.collection("BucketItems");
+export const ITEMS = db.collection("Items");
 
 export default db;

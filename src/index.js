@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import logger from "morgan";
 import routes from "./routes";
 import passport from "passport";
 import * as FB from "./auth/fb";
@@ -10,6 +11,7 @@ const app = express();
 app.set("port", process.env.PORT || 8080);
 
 app.use(cors());
+app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

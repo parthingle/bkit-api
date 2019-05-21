@@ -18,16 +18,16 @@ export const getBucket = async (req, res, next) => {
     next();
 };
 
-export const resolveBucketItems = async (req, res, next) => {
-    let bucketItems;
+export const resolveItems = async (req, res, next) => {
+    let items;
     try {
-        bucketItems = (await Promise.all(
-            res.locals.bucket.bucketItems.map(bi => bi.get())
+        items = (await Promise.all(
+            res.locals.bucket.items.map(bi => bi.get())
         )).map(bi => bi.data());
     } catch (error) {
         next(error);
         return;
     }
-    res.locals.bucket.bucketItems = bucketItems;
+    res.locals.bucket.items = items;
     next();
 };

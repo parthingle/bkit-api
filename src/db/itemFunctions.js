@@ -1,25 +1,40 @@
-import { USERS, BUCKETS, ITEMS } from "../config/firebase";
+import { ITEMS } from "../config/firebase";
 import moment from "moment";
 
-export const getItem = async (req, res, next) => {
-    let item, itemSnapshot;
-    try {
-        itemSnapshot = await ITEMS.doc(req.params.id).get();
-        if (!itemSnapshot.exists) {
-            res.status(404).json({ message: "Bucket item not found!" });
-            return;
-        } else {
-            item = itemSnapshot.data();
-        }
-    } catch (error) {
-        next(error);
-        return;
+/*
+ * Used as an internal function to resolve references
+ */
+export const resolveItems = async items => {
+    let resolvedItems;
+
+    if (!items) {
+        return Promise.resolve(null);
     }
-    res.locals.item = item;
-    next();
+
+    try {
+        resolvedItems = await Promise.all(
+            items.map(item => {
+                return item.get().then(itemSnapshot => itemSnapshot.data());
+            })
+        );
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(resolvedItems);
 };
 
-export const newItem = async (req, res, next) => {
+export const getItemFromId = async id => {
+    let item, itemSnapshot;
+    try {
+        itemSnapshot = await ITEMS.doc(id).get();
+        item = itemSnapshot.exists ? itemSnapshot.data() : null;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(item);
+};
+
+export const createNewItem = async item => {
     let newItem;
     try {
         // doc() creates a document with the given identifier
@@ -34,13 +49,11 @@ export const newItem = async (req, res, next) => {
                     upvotes: 0,
                     downvotes: 0
                 },
-                req.body
+                item
             )
         );
     } catch (error) {
-        next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.newItem = newItem;
-    next();
+    return Promise.resolve(newItem);
 };

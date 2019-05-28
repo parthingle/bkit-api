@@ -1,15 +1,14 @@
-import { USERS, BUCKETS, ITEMS } from "../config/firebase";
-import { Bucket } from "@google-cloud/storage";
+import * as Users from "../db/userFunctions";
+import * as Buckets from "../db/bucketFunctions";
+import * as Items from "../db/itemFunctions";
 
 export const getMyProfile = async (req, res, next) => {
-    let user, userSnapshot;
+    let user;
     try {
-        userSnapshot = await USERS.doc(req.auth.id).get();
-        if (!userSnapshot.exists) {
+        user = await Users.getProfileFromId(req.auth.id);
+        if (!user) {
             res.status(404).json({ message: "User not found!" });
             return;
-        } else {
-            user = userSnapshot.data();
         }
     } catch (error) {
         next(error);
@@ -20,22 +19,12 @@ export const getMyProfile = async (req, res, next) => {
 };
 
 export const getPublicProfile = async (req, res, next) => {
-    let user, fullUser, userSnapshot;
+    let user;
     try {
-        userSnapshot = await USERS.doc(req.params.id).get();
-        if (!userSnapshot.exists) {
+        user = await Users.getPublicProfileFromId(req.params.id);
+        if (!user) {
             res.status(404).json({ message: "User not found!" });
             return;
-        } else {
-            fullUser = userSnapshot.data();
-            user = {
-                firstName: fullUser.firstName,
-                lastName: fullUser.lastName,
-                profilePic: fullUser.profilePic,
-                bio: fullUser.bio,
-                myBuckets: fullUser.myBuckets,
-                myItems: fullUser.myItems
-            };
         }
     } catch (error) {
         next(error);
@@ -48,9 +37,7 @@ export const getPublicProfile = async (req, res, next) => {
 export const resolveUserBuckets = async (req, res, next) => {
     let myBuckets;
     try {
-        myBuckets = (await Promise.all(
-            res.locals.user.myBuckets.map(b => b.get())
-        )).map(b => b.data());
+        myBuckets = await Buckets.resolveBuckets(res.locals.user.myBuckets);
     } catch (error) {
         next(error);
         return;
@@ -60,27 +47,21 @@ export const resolveUserBuckets = async (req, res, next) => {
 };
 
 export const resolveUserItems = async (req, res, next) => {
-    let myItems;
+    let myBucketItems;
     try {
-        myItems = (await Promise.all(
-            res.locals.user.myItems.map(bi => bi.get())
-        )).map(bi => bi.data());
+        myBucketItems = await Items.resolveItems(res.locals.user.myBucketItems);
     } catch (error) {
         next(error);
         return;
     }
-    res.locals.user.myItems = myItems;
+    res.locals.user.myBucketItems = myBucketItems;
     next();
 };
 
 export const newUser = async (req, res, next) => {
     let newUser;
     try {
-        // doc() creates a document with the given identifier
-        // set() updates documents
-        newUser = await USERS.doc(req.body.user.profileId).set({
-            data: req.body.user
-        });
+        newUser = User.createNewUser(req.body.user);
     } catch (error) {
         next(error);
         return;

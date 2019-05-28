@@ -1,90 +1,71 @@
-import { USERS, BUCKETS, ITEMS } from "../config/firebase";
-import { Bucket } from "@google-cloud/storage";
+import { USERS } from "../config/firebase";
 
-export const getMyProfile = async (req, res, next) => {
+export const getProfileFromId = async id => {
     let user, userSnapshot;
     try {
-        userSnapshot = await USERS.doc(req.auth.id).get();
-        if (!userSnapshot.exists) {
-            res.status(404).json({ message: "User not found!" });
-            return;
-        } else {
-            user = userSnapshot.data();
-        }
+        userSnapshot = await USERS.doc(id).get();
+        user = userSnapshot.exists ? userSnapshot.data() : null;
     } catch (error) {
-        next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.user = user;
-    next();
+    return Promise.resolve(user);
 };
 
-export const getPublicProfile = async (req, res, next) => {
-    let user, fullUser, userSnapshot;
+export const getPublicProfileFromId = async id => {
+    let user, fullUser;
     try {
-        userSnapshot = await USERS.doc(req.params.id).get();
-        if (!userSnapshot.exists) {
-            res.status(404).json({ message: "User not found!" });
-            return;
-        } else {
-            fullUser = userSnapshot.data();
-            user = {
-                firstName: fullUser.firstName,
-                lastName: fullUser.lastName,
-                profilePic: fullUser.profilePic,
-                bio: fullUser.bio,
-                myBuckets: fullUser.myBuckets,
-                myItems: fullUser.myItems
-            };
-        }
+        fullUser = await getProfileFromId(id);
+        user = fullUser
+            ? {
+                  firstName: fullUser.firstName,
+                  lastName: fullUser.lastName,
+                  profilePic: fullUser.profilePic,
+                  bio: fullUser.bio,
+                  myBuckets: fullUser.myBuckets,
+                  myItems: fullUser.myItems
+              }
+            : null;
     } catch (error) {
-        next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.user = user;
-    next();
+    return Promise.resolve(user);
 };
 
-export const resolveUserBuckets = async (req, res, next) => {
-    let myBuckets;
+export const resolveUserBuckets = async user => {
+    let buckets;
     try {
-        myBuckets = (await Promise.all(
-            res.locals.user.myBuckets.map(b => b.get())
-        )).map(b => b.data());
+        buckets = (await Promise.all(user.buckets.map(b => b.get()))).map(b =>
+            b.data()
+        );
     } catch (error) {
-        next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.user.myBuckets = myBuckets;
-    next();
+    return Promise.resolve(buckets);
 };
 
-export const resolveUserItems = async (req, res, next) => {
-    let myItems;
+export const resolveUserItems = async user => {
+    let items;
     try {
-        myItems = (await Promise.all(
-            res.locals.user.myItems.map(bi => bi.get())
-        )).map(bi => bi.data());
+        items = (await Promise.all(user.items.map(bi => bi.get()))).map(bi =>
+            bi.data()
+        );
     } catch (error) {
         next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.user.myItems = myItems;
-    next();
+    Promise.resolve(items);
 };
 
-export const newUser = async (req, res, next) => {
+export const createNewUser = async user => {
     let newUser;
     try {
         // doc() creates a document with the given identifier
         // set() updates documents
-        newUser = await USERS.doc(req.body.user.profileId).set({
-            data: req.body.user
+        newUser = await USERS.doc(user.profileId).set({
+            data: user
         });
     } catch (error) {
-        next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.newUser = newUser;
-    next();
+    return Promise.resolve(newUser);
 };

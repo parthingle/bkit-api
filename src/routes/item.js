@@ -1,5 +1,5 @@
 import express from "express";
-import * as Items from "../db/itemFunctions";
+import * as Items from "../handlers/itemHandlers";
 
 const itemRouter = express.Router();
 

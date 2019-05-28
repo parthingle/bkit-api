@@ -1,6 +1,6 @@
 import passport from "passport";
 import * as JWT from "../auth/jwt";
-import * as Users from "../db/userFunctions";
+import * as Users from "../handlers/userHandlers";
 const ignoreAuthCheckPaths = ["/auth/facebook", "/auth/signup"];
 
 // Route

@@ -1,27 +1,62 @@
 // Computation of numbers and ratios in various screens
 
+// Imports
+import * as Items from "../db/itemFunctions"
+
+// Accepts the lengths of total and completed items
+// Returns the percentage done
 const computeCompletion = (lenBucketed, lenTotal) => {
     return Math.ceil(lenBucketed / lenTotal);
 };
 
-// Accepts user.myBucketedItems and allItems and returns
-// an array of bools corresponding to if that user has
-// bucketed that item or not
-const isBucketed = (bucketedItems, allItems) => {
-    let exists = [];
-    allItems.forEach(i => {
-        i in bucketedItems ? exists.push(true) : exists.push(false);
+// Accepts an array: [{itemId, timestamp}]
+// Returns two arrays [itemId], [timestamp]
+const splitItems = bucketedItems => {
+    let ids = [];
+    let timestamps = [];
+    bucketedItems.forEach(item => {
+        ids.push(item.id);
+        timestamps.push(item.timestamp);
     });
-    return exists;
+    return ids, timestamps;
 };
 
-export const prepHome = (user, allItems) => {
-    let exists = isBucketed(user.myBucketedItems);
+// Accepts user.myBucketedItems and allItems and returns
+// an array of timestamps corresponding to if that user has
+// bucketed that item (JS time for when bucketed) or not (-1)
+const isBucketed = (bucketedItems, allItems) => {
+    let times = [];
+    let { ids, timestamps } = splitItems(bucketedItems);
+
+    allItems.map(i, idx => {
+        i in ids ? times.push(timestamps[idx]) : times.push(-1);
+   });
+    return times;
+};
+
+
+// Accepts a user object and allItems
+// Returns an object that contains % of completed items
+// and an array of items stamped with a "done" timestamp for when
+// the given user "bucketed" those items, -1 if the user didn't
+export const prepHome = async (user, allItems) => {
+    let times = isBucketed(user.myBucketedItems);
+    let stampedItems = [];
+    allItems.map(i, idx => {
+        try {
+        let item = await Items.getItemFromId(i);
+        item["done"] = times[idx];
+        stampedItems.push(item)
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    })
     let returnObject = {
         completionPercentage: computeCompletion(
             user.myBucketedItems.length,
             allItems.length
         ),
-        items: []
+        items: stampedItems
     };
+    return returnObject;
 };

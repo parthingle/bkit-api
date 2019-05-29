@@ -1,33 +1,36 @@
-import { BUCKETS, ITEMS } from "../config/firebase";
+import { BUCKETS } from "../config/firebase";
 
-export const getBucket = async (req, res, next) => {
-    let bucket, bucketSnapshot;
-    try {
-        bucketSnapshot = await BUCKETS.doc(req.params.id).get();
-        if (!bucketSnapshot.exists) {
-            res.status(404).json({ message: "Bucket not found!" });
-            return;
-        } else {
-            bucket = bucketSnapshot.data();
-        }
-    } catch (error) {
-        next(error);
-        return;
+/*
+ * Used as an internal function to resolve references
+ */
+export const resolveBuckets = async buckets => {
+    let resolvedBuckets;
+
+    if (!buckets) {
+        return Promise.resolve(null);
     }
-    res.locals.bucket = bucket;
-    next();
+
+    try {
+        resolvedBuckets = await Promise.all(
+            buckets.map(bucket => {
+                return bucket
+                    .get()
+                    .then(bucketSnapshot => bucketSnapshot.data());
+            })
+        );
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(resolvedBuckets);
 };
 
-export const resolveItems = async (req, res, next) => {
-    let items;
+export const getBucketFromId = async id => {
+    let bucket;
     try {
-        items = (await Promise.all(
-            res.locals.bucket.items.map(bi => bi.get())
-        )).map(bi => bi.data());
+        bucket = await BUCKETS.doc(id).get();
+        bucket = bucket.exists ? bucket.data() : null;
     } catch (error) {
-        next(error);
-        return;
+        return Promise.reject(error);
     }
-    res.locals.bucket.items = items;
-    next();
+    return Promise.resolve(bucket);
 };

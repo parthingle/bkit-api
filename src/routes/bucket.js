@@ -1,6 +1,6 @@
 import express from "express";
-import * as Buckets from "../db/bucketFunctions";
-import * as Users from "../db/userFunctions";
+import * as Buckets from "../handlers/bucketHandlers";
+import * as Users from "../handlers/userHandlers";
 
 const bucketRouter = express.Router();
 

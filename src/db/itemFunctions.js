@@ -57,3 +57,14 @@ export const createNewItem = async item => {
     }
     return Promise.resolve(newItem);
 };
+
+export const getAll = async () => {
+    let allItems, allItemsRef;
+    try {
+        allItemsRef = await ITEMS.get();
+        allItemsRef.docs.forEach(doc => allItems.push(doc.data()));
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(newItem);
+};

@@ -25,4 +25,9 @@ userRouter.get(
     }
 );
 
+userRouter.get("/home", Users.getHomePage, (req, res) => {
+    res.status(200).send(res.locals.home);
+    return;
+});
+
 export default userRouter;

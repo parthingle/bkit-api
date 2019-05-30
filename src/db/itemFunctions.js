@@ -70,4 +70,21 @@ export const insertIntoArray = async (id, field, xid) => {
     } catch (error) {
         Promise.reject(error);
     }
+    return Promise.resolve(true);
+};
+
+export const removeFromArray = async (xid, field, id) => {
+    let itemRef;
+    try {
+        itemRef = await ITEMS.doc(id).get();
+        if (!itemRef.exists) {
+            return Promise.reject(new Error("Item not found!"));
+        }
+        await itemRef.update({
+            field: FieldValue.arrayRemove(xid)
+        });
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(true);
 };

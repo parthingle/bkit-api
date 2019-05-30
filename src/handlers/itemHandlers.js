@@ -30,7 +30,6 @@ export const newItem = async (req, res, next) => {
 };
 
 export const buckItem = async (req, res, next) => {
-    let item;
     try {
         await Items.insertIntoArray(
             req.params.id,

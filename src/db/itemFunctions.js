@@ -59,13 +59,6 @@ export const createNewItem = async item => {
 };
 
 export const getAll = async () => {
-    let allItems = [],
-        allItemsRef;
-    try {
-        allItemsRef = await ITEMS.get();
-        allItemsRef.docs.map(doc => allItems.push(doc.data()));
-    } catch (error) {
-        return Promise.reject(error);
-    }
-    return Promise.resolve(allItems);
+    const allItems = await ITEMS.get().docs.map(doc => doc.data());
+    return allItems;
 };

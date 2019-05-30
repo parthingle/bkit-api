@@ -1,6 +1,5 @@
 import express from "express";
 import * as Users from "../handlers/userHandlers";
-import db from "../config/firebase";
 
 const userRouter = express.Router();
 

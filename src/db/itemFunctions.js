@@ -1,5 +1,4 @@
-import { ITEMS } from "../config/firebase";
-import moment from "moment";
+import { ITEMS, FieldValue } from "../config/firebase";
 
 /*
  * Used as an internal function to resolve references
@@ -44,7 +43,7 @@ export const createNewItem = async (item, id) => {
                 {
                     timeCreated: moment.now(),
                     creator: id,
-                    userWhoLike: [],
+                    userWhoBucketed: [],
                     bucketsReferencedIn: [],
                     upvotes: 0,
                     downvotes: 0
@@ -56,4 +55,19 @@ export const createNewItem = async (item, id) => {
         return Promise.reject(error);
     }
     return Promise.resolve(newItem);
+};
+
+export const insertIntoArray = async (id, field, xid) => {
+    let itemRef;
+    try {
+        itemRef = await ITEMS.doc(id).get();
+        if (!itemRef.exists) {
+            return Promise.reject(new Error("Item not found!"));
+        }
+        await itemRef.update({
+            field: FieldValue.arrayUnion({ id: xid, timestamp: new Date() }) //check syntax
+        });
+    } catch (error) {
+        Promise.reject(error);
+    }
 };

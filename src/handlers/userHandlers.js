@@ -1,6 +1,7 @@
 import * as Users from "../db/userFunctions";
 import * as Buckets from "../db/bucketFunctions";
 import * as Items from "../db/itemFunctions";
+import * as Bin from "../bin/completion";
 
 export const getMyProfile = async (req, res, next) => {
     let user;
@@ -67,5 +68,19 @@ export const newUser = async (req, res, next) => {
         return;
     }
     res.locals.newUser = newUser;
+    next();
+};
+
+export const getHomePage = async (req, res, next) => {
+    let thisUser, allItems, home;
+    try {
+        thisUser = await Users.getProfileFromId(req.auth.id);
+        allItems = await Items.getAll();
+    } catch (error) {
+        next(error);
+        return;
+    }
+    home = Bin.prepHome(thisUser, allItems);
+    res.locals.home = home;
     next();
 };

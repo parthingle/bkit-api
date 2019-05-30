@@ -1,7 +1,7 @@
 // Computation of numbers and ratios in various screens
 
 // Imports
-import * as Items from "../db/itemFunctions"
+import * as Items from "../db/itemFunctions";
 
 // Accepts the lengths of total and completed items
 // Returns the percentage done
@@ -30,10 +30,9 @@ const isBucketed = (bucketedItems, allItems) => {
 
     allItems.map(i, idx => {
         i in ids ? times.push(timestamps[idx]) : times.push(-1);
-   });
+    });
     return times;
 };
-
 
 // Accepts a user object and allItems
 // Returns an object that contains % of completed items
@@ -42,15 +41,15 @@ const isBucketed = (bucketedItems, allItems) => {
 export const prepHome = async (user, allItems) => {
     let times = isBucketed(user.myBucketedItems);
     let stampedItems = [];
-    allItems.map(i, idx => {
+    allItems.map(async (i, idx) => {
         try {
-        let item = await Items.getItemFromId(i);
-        item["done"] = times[idx];
-        stampedItems.push(item)
+            let item = await Items.getItemFromId(i);
+            item["done"] = times[idx];
+            stampedItems.push(item);
         } catch (error) {
             return Promise.reject(error);
         }
-    })
+    });
     let returnObject = {
         completionPercentage: computeCompletion(
             user.myBucketedItems.length,

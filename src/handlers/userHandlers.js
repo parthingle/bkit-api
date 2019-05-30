@@ -74,13 +74,13 @@ export const newUser = async (req, res, next) => {
 export const getHomePage = async (req, res, next) => {
     let thisUser, allItems, home;
     try {
-        thisUser = await Users.getProfileFromId(req.auth.id);
+        thisUser = await Users.getProfileFromId("42069");
         allItems = await Items.getAll();
     } catch (error) {
         next(error);
         return;
     }
-    home = Bin.prepHome(thisUser, allItems);
+    home = await Bin.prepHome(thisUser, allItems);
     res.locals.home = home;
     next();
 };

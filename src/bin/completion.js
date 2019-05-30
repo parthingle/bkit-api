@@ -1,12 +1,11 @@
 // Computation of numbers and ratios in various screens
 
 // Imports
-import * as Items from "../db/itemFunctions";
 
 // Accepts the lengths of total and completed items
 // Returns the percentage done
 const computeCompletion = (lenBucketed, lenTotal) => {
-    return Math.ceil(lenBucketed / lenTotal);
+    return lenBucketed / lenTotal;
 };
 
 // Accepts an array: [{itemId, timestamp}]
@@ -18,7 +17,7 @@ const splitItems = bucketedItems => {
         ids.push(item.id);
         timestamps.push(item.timestamp);
     });
-    return ids, timestamps;
+    return { ids, timestamps };
 };
 
 // Accepts user.myBucketedItems and allItems and returns
@@ -27,8 +26,7 @@ const splitItems = bucketedItems => {
 const isBucketed = (bucketedItems, allItems) => {
     let times = [];
     let { ids, timestamps } = splitItems(bucketedItems);
-
-    allItems.map(i, idx => {
+    allItems.map((i, idx) => {
         i in ids ? times.push(timestamps[idx]) : times.push(-1);
     });
     return times;
@@ -39,11 +37,10 @@ const isBucketed = (bucketedItems, allItems) => {
 // and an array of items stamped with a "done" timestamp for when
 // the given user "bucketed" those items, -1 if the user didn't
 export const prepHome = async (user, allItems) => {
-    let times = isBucketed(user.myBucketedItems);
+    let times = isBucketed(user.myBucketedItems, allItems);
     let stampedItems = [];
-    allItems.map(async (i, idx) => {
+    allItems.map(async (item, idx) => {
         try {
-            let item = await Items.getItemFromId(i);
             item["done"] = times[idx];
             stampedItems.push(item);
         } catch (error) {

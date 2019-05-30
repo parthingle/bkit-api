@@ -59,12 +59,13 @@ export const createNewItem = async item => {
 };
 
 export const getAll = async () => {
-    let allItems, allItemsRef;
+    let allItems = [],
+        allItemsRef;
     try {
         allItemsRef = await ITEMS.get();
-        allItemsRef.docs.forEach(doc => allItems.push(doc.data()));
+        allItemsRef.docs.map(doc => allItems.push(doc.data()));
     } catch (error) {
         return Promise.reject(error);
     }
-    return Promise.resolve(newItem);
+    return Promise.resolve(allItems);
 };

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import expressJwt from "express-jwt";
+import unless from "express-unless";
 import keys from "../config/keys";
 
 export const createToken = userID => {
@@ -36,3 +37,4 @@ export const authenticateUser = expressJwt({
         return null;
     }
 });
+authenticateUser.unless = unless;

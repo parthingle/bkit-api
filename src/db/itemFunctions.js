@@ -34,7 +34,7 @@ export const getItemFromId = async id => {
     return Promise.resolve(item);
 };
 
-export const createNewItem = async item => {
+export const createNewItem = async (item, id) => {
     let newItem;
     try {
         // doc() creates a document with the given identifier
@@ -43,7 +43,7 @@ export const createNewItem = async item => {
             Object.assign(
                 {
                     timeCreated: moment.now(),
-                    creator: null, // TODO: Change this when we get facebook working
+                    creator: id,
                     userWhoLike: [],
                     bucketsReferencedIn: [],
                     upvotes: 0,

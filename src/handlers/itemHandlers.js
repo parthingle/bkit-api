@@ -19,7 +19,7 @@ export const getItem = async (req, res, next) => {
 export const newItem = async (req, res, next) => {
     let newItem;
     try {
-        newItem = await Items.createNewItem(req.body.item);
+        newItem = await Items.createNewItem(req.body.item, req.auth.id);
     } catch (error) {
         next(error);
         return;

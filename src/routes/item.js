@@ -23,4 +23,12 @@ itemRouter.post(
     }
 );
 
+itemRouter.post(
+    "/buck/:id",
+    Items.buckItem,
+
+    (req, res) => {
+        res.status(200).send({ message: "item bucked!" });
+    }
+);
 export default itemRouter;

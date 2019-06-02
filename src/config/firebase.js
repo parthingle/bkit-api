@@ -8,6 +8,8 @@ admin.initializeApp({
     databaseURL: keys.DATABASE_URL
 });
 
+export const FieldValue = admin.firestore.FieldValue;
+
 const db = admin.firestore();
 export const USERS = db.collection("Users");
 export const BUCKETS = db.collection("Buckets");

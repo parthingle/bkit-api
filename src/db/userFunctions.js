@@ -69,3 +69,18 @@ export const createNewUser = async user => {
     }
     return Promise.resolve(newUser);
 };
+
+export const insertIntoArray = async (id, field, xid) => {
+    let itemRef;
+    try {
+        itemRef = await USERS.doc(id).get();
+        if (!itemRef.exists) {
+            return Promise.reject(new Error("Item not found!"));
+        }
+        await itemRef.update({
+            field: FieldValue.arrayUnion(xid) //check syntax
+        });
+    } catch (error) {
+        Promise.reject(error);
+    }
+};

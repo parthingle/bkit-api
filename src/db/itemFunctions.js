@@ -1,5 +1,4 @@
-import { ITEMS } from "../config/firebase";
-import moment from "moment";
+import { ITEMS, FieldValue } from "../config/firebase";
 
 /*
  * Used as an internal function to resolve references
@@ -34,7 +33,7 @@ export const getItemFromId = async id => {
     return Promise.resolve(item);
 };
 
-export const createNewItem = async item => {
+export const createNewItem = async (item, id) => {
     let newItem;
     try {
         // doc() creates a document with the given identifier
@@ -43,8 +42,8 @@ export const createNewItem = async item => {
             Object.assign(
                 {
                     timeCreated: moment.now(),
-                    creator: null, // TODO: Change this when we get facebook working
-                    userWhoLike: [],
+                    creator: id,
+                    userWhoBucketed: [],
                     bucketsReferencedIn: [],
                     upvotes: 0,
                     downvotes: 0
@@ -58,7 +57,39 @@ export const createNewItem = async item => {
     return Promise.resolve(newItem);
 };
 
+export const insertIntoArray = async (id, field, xid) => {
+    let itemRef;
+    try {
+        itemRef = await ITEMS.doc(id).get();
+        if (!itemRef.exists) {
+            return Promise.reject(new Error("Item not found!"));
+        }
+        await itemRef.update({
+            field: FieldValue.arrayUnion({ id: xid, timestamp: new Date() }) //check syntax
+        });
+    } catch (error) {
+        Promise.reject(error);
+    }
+    return Promise.resolve(true);
+};
+
+export const removeFromArray = async (xid, field, id) => {
+    let itemRef;
+    try {
+        itemRef = await ITEMS.doc(id).get();
+        if (!itemRef.exists) {
+            return Promise.reject(new Error("Item not found!"));
+        }
+        await itemRef.update({
+            field: FieldValue.arrayRemove(xid)
+        });
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(true);
+  
 export const getAll = async () => {
     const allItems = await ITEMS.get().docs.map(doc => doc.data());
     return allItems;
+
 };

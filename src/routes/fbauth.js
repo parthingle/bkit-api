@@ -12,11 +12,6 @@ authRouter.get(
     "/facebook",
     // First verify if accessToken is valid (verify_callback: src/auth/fb.js:18)
     passport.authenticate("facebook-token", { session: false }),
-    (req, res, next) => {
-        if (!req.user.signupComplete) {
-            res.status(202).send(...req.user);
-        } else next();
-    },
     JWT.generateToken,
     JWT.sendToken
 );

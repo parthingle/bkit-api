@@ -10,7 +10,17 @@ export const getProfileFromId = async id => {
     }
     return Promise.resolve(user);
 };
-
+export const timestampProfile = async (id, field) => {
+    let userSnapshot;
+    try {
+        userSnapshot = await USERS.doc(id).get();
+        userSnapshot.exists
+            ? await userSnapshot.update({ [field]: Date.now() })
+            : new Error("User does not exist");
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
 export const getPublicProfileFromId = async id => {
     let user, fullUser;
     try {

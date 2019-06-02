@@ -61,9 +61,7 @@ export const createNewUser = async user => {
     try {
         // doc() creates a document with the given identifier
         // set() updates documents
-        newUser = await USERS.doc(user.profileId).set({
-            data: user
-        });
+        newUser = await USERS.doc(user.profileId).set(user);
     } catch (error) {
         return Promise.reject(error);
     }

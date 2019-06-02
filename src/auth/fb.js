@@ -39,7 +39,7 @@ export const verify_callback = async (
             bio: "I'm a chump",
             dateCreated: Date.now(),
             signupComplete: true,
-            lastUse: Date.now(),
+            lastLogin: Date.now(),
             myBucketedItems: [],
             friends: []
         };
@@ -49,5 +49,6 @@ export const verify_callback = async (
             err = new Error("Database error!");
         }
     }
+    Users.timestampProfile(user.profileId, "lastLogin");
     return next(err, user);
 };

@@ -87,4 +87,9 @@ export const removeFromArray = async (xid, field, id) => {
         return Promise.reject(error);
     }
     return Promise.resolve(true);
+  
+export const getAll = async () => {
+    const allItems = await ITEMS.get().docs.map(doc => doc.data());
+    return allItems;
+
 };

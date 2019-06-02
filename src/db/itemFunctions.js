@@ -57,3 +57,8 @@ export const createNewItem = async item => {
     }
     return Promise.resolve(newItem);
 };
+
+export const getAll = async () => {
+    const allItems = await ITEMS.get().docs.map(doc => doc.data());
+    return allItems;
+};

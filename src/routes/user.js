@@ -1,6 +1,5 @@
 import express from "express";
 import * as Users from "../handlers/userHandlers";
-import db from "../config/firebase";
 
 const userRouter = express.Router();
 
@@ -24,5 +23,10 @@ userRouter.get(
         return;
     }
 );
+
+userRouter.get("/home", Users.getHomePage, (req, res) => {
+    res.status(200).send(res.locals.home);
+    return;
+});
 
 export default userRouter;

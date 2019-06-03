@@ -10,7 +10,17 @@ export const getProfileFromId = async id => {
     }
     return Promise.resolve(user);
 };
-
+export const timestampProfile = async (id, field) => {
+    let userSnapshot;
+    try {
+        userSnapshot = await USERS.doc(id).get();
+        userSnapshot.exists
+            ? await userSnapshot.update({ [field]: Date.now() })
+            : new Error("User does not exist");
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
 export const getPublicProfileFromId = async id => {
     let user, fullUser;
     try {
@@ -61,9 +71,7 @@ export const createNewUser = async user => {
     try {
         // doc() creates a document with the given identifier
         // set() updates documents
-        newUser = await USERS.doc(user.profileId).set({
-            data: user
-        });
+        newUser = await USERS.doc(user.profileId).set(user);
     } catch (error) {
         return Promise.reject(error);
     }

@@ -74,7 +74,7 @@ export const newUser = async (req, res, next) => {
 export const getHomePage = async (req, res, next) => {
     let thisUser, allItems, home;
     try {
-        thisUser = await Users.getProfileFromId(req.auth.id);
+        thisUser = await Users.getProfileFromId("108010467122095");
         allItems = await Items.getAll();
     } catch (error) {
         next(error);

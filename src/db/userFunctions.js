@@ -13,10 +13,7 @@ export const getProfileFromId = async id => {
 export const timestampProfile = async (id, field) => {
     let userSnapshot;
     try {
-        userSnapshot = await USERS.doc(id).get();
-        userSnapshot.exists
-            ? await userSnapshot.update({ [field]: Date.now() })
-            : new Error("User does not exist");
+        userSnapshot = await USERS.doc(id).update({ [field]: Date.now() });
     } catch (error) {
         return Promise.reject(error);
     }

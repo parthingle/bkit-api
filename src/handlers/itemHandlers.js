@@ -32,17 +32,14 @@ export const newItem = async (req, res, next) => {
 export const buckItem = async (req, res, next) => {
     try {
         await Items.insertIntoArray(
-            req.params.id,
-            "usersWhoBucketed",
-            req.auth.id
-        );
-        await Users.insertIntoArray(
             req.auth.id,
-            "myBucketedItems",
+            "usersWhoBucketed",
             req.params.id
         );
+        await Users.updateObject(req.auth.id, req.params.id, "myBucketedItems");
+        next();
     } catch (error) {
         next(error);
-        return;
     }
+    return;
 };

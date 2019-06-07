@@ -57,15 +57,10 @@ export const createNewItem = async (item, id) => {
     return Promise.resolve(newItem);
 };
 
-export const insertIntoArray = async (id, field, xid) => {
-    let itemRef;
+export const insertIntoArray = async (id, field, iid) => {
     try {
-        itemRef = await ITEMS.doc(id).get();
-        if (!itemRef.exists) {
-            return Promise.reject(new Error("Item not found!"));
-        }
-        await itemRef.update({
-            field: FieldValue.arrayUnion({ id: xid, timestamp: new Date() }) //check syntax
+        await ITEMS.doc(iid).update({
+            [field]: FieldValue.arrayUnion(id) //check syntax
         });
     } catch (error) {
         Promise.reject(error);

@@ -75,16 +75,18 @@ export const createNewUser = async user => {
     return Promise.resolve(newUser);
 };
 
-export const insertIntoArray = async (id, field, xid) => {
-    let itemRef;
+export const updateObject = async (uid, iid, field) => {
+    let item, itemRef, obj;
     try {
-        itemRef = await USERS.doc(id).get();
-        if (!itemRef.exists) {
-            return Promise.reject(new Error("Item not found!"));
+        itemRef = USERS.doc(uid);
+        item = await itemRef.get();
+        if (item.exists) {
+            obj = item.data();
+            obj[[field]][[iid]] = Date.now();
+            itemRef.update(obj);
+        } else {
+            throw new Error("User does not exist");
         }
-        await itemRef.update({
-            field: FieldValue.arrayUnion(xid) //check syntax
-        });
     } catch (error) {
         Promise.reject(error);
     }

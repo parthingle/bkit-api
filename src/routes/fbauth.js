@@ -12,10 +12,6 @@ authRouter.post(
     "/facebook",
     // First verify if accessToken is valid (verify_callback: src/auth/fb.js:18)
     passport.authenticate("facebook-token", { session: false }),
-    (req, res, next) => {
-        console.log("passport cleared");
-        next();
-    },
     JWT.generateToken,
     JWT.sendToken
 );

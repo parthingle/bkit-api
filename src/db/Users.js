@@ -77,19 +77,19 @@ export const createNewUser = async user => {
     return Promise.resolve(newUser);
 };
 
-export const updateObject = async (uid, iid, field) => {
-    let item, itemRef, obj;
+export const setObject = async (uid, iid, field) => {
+    let user, userRef, obj;
     try {
-        itemRef = USERS.doc(uid);
-        item = await itemRef.get();
-        if (item.exists) {
-            obj = item.data();
+        userRef = USERS.doc(uid);
+        user = await userRef.get();
+        if (user.exists) {
+            obj = user.data();
             obj[[field]][[iid]] = Date.now();
-            itemRef.update(obj);
+            return userRef.set(obj);
         } else {
             throw new Error("User does not exist");
         }
     } catch (error) {
-        Promise.reject(error);
+        return Promise.reject(error);
     }
 };

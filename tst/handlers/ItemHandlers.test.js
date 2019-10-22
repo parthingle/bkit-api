@@ -114,7 +114,7 @@ describe("ItemHandlers", () => {
     describe("buckItem()", () => {
         it("does nothing on success", async () => {
             const insertStub = sinon.stub(db.Items, "insertIntoArray");
-            const updateStub = sinon.stub(db.Users, "updateObject");
+            const updateStub = sinon.stub(db.Users, "setObject");
 
             const req = {
                 auth: {
@@ -146,7 +146,7 @@ describe("ItemHandlers", () => {
 
         it("calls next() once with the error on exception", async () => {
             sinon.stub(db.Items, "insertIntoArray").throws();
-            sinon.stub(db.Users, "updateObject").throws();
+            sinon.stub(db.Users, "setObject").throws();
 
             const req = {};
             const res = {};

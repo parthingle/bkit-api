@@ -27,7 +27,11 @@ export const verify_callback = async (
     next
 ) => {
     // Use `profile` to get facebook data (profile.id, profile.givenName, etc.)
-    let user, err;
+    let user, err, rtoken;
+    rtoken = require("crypto")
+        .createHash("md5")
+        .update(profile.id + new Date().toString())
+        .digest("hex");
     user = await db.Users.getProfileFromId(profile.id);
     if (!user) {
         // If User exists in database, set to `user`, otherwise set user to:
@@ -42,7 +46,8 @@ export const verify_callback = async (
             signupComplete: true,
             lastLogin: Date.now(),
             myBucketedItems: [],
-            friends: []
+            friends: [],
+            rtoken: rtoken
         };
         try {
             await db.Users.createNewUser(user);

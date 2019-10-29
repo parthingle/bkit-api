@@ -16,13 +16,19 @@ export const createToken = userID => {
 };
 
 export const generateToken = (req, res, next) => {
-    req.token = createToken(req.user.profileId);
+    var profileId;
+    profileId = req.user ? req.user.profileId : res.locals.user.profileId;
+    req.token = createToken(profileId);
     next();
 };
 
 export const sendToken = (req, res) => {
     res.setHeader("x-auth-token", req.token);
-    res.status(200).send({ jwtoken: req.token });
+    var rtoken = req.user ? req.user.rtoken : res.locals.user.rtoken;
+    res.status(200).send({
+        jwtoken: req.token,
+        rtoken: rtoken
+    });
 };
 
 // This implicitly puts the user id into req.auth

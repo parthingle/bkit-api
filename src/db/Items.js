@@ -83,6 +83,7 @@ export const removeFromArray = async (xid, field, id) => {
     }
     return Promise.resolve(true);
 };
+
 export const getAll = async () => {
     let allItems = [];
     const allItemsRef = await ITEMS.get();

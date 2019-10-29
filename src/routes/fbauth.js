@@ -1,7 +1,11 @@
 import passport from "passport";
 import * as JWT from "../auth/jwt";
-import * as Users from "../handlers/userHandlers";
+
+import db from "../db";
+import UserHandlers from "../handlers/UserHandlers";
+
 const ignoreAuthCheckPaths = ["/auth/facebook", "/auth/signup"];
+const userHandlers = new UserHandlers(db);
 
 // Route
 const authRouter = require("express").Router();
@@ -19,7 +23,7 @@ authRouter.post(
 // Expects a user object in `req.params.user`
 authRouter.post(
     "/signup",
-    Users.newUser,
+    userHandlers.newUser,
     (req, res, next) => {
         // jws.js expects there to be something in req.user so we have to update that field
         req.user = res.locals.newUser;

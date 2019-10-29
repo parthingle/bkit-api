@@ -1,13 +1,16 @@
 import express from "express";
-import * as Users from "../handlers/userHandlers";
+
+import db from "../db";
+import UserHandlers from "../handlers/UserHandlers";
 
 const userRouter = express.Router();
+const userHandlers = new UserHandlers(db);
 
 userRouter.get(
     "/my",
-    Users.getMyProfile,
-    Users.resolveUserBuckets,
-    Users.resolveUserItems,
+    userHandlers.getMyProfile,
+    userHandlers.resolveUserBuckets,
+    userHandlers.resolveUserItems,
     (req, res) => {
         res.status(200).send(res.locals.user);
         return;
@@ -15,16 +18,16 @@ userRouter.get(
 );
 userRouter.get(
     "/public/:id",
-    Users.getPublicProfile,
-    Users.resolveUserBuckets,
-    Users.resolveUserItems,
+    userHandlers.getPublicProfile,
+    userHandlers.resolveUserBuckets,
+    userHandlers.resolveUserItems,
     (req, res) => {
         res.status(200).send(res.locals.user);
         return;
     }
 );
 
-userRouter.get("/home", Users.getHomePage, (req, res) => {
+userRouter.get("/home", userHandlers.getHomePage, (req, res) => {
     res.status(200).send(res.locals.home);
     return;
 });

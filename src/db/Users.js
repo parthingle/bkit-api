@@ -10,6 +10,7 @@ export const getProfileFromId = async id => {
     }
     return Promise.resolve(user);
 };
+
 export const timestampProfile = async (id, field) => {
     let userSnapshot;
     try {
@@ -18,6 +19,7 @@ export const timestampProfile = async (id, field) => {
         return Promise.reject(error);
     }
 };
+
 export const getPublicProfileFromId = async id => {
     let user, fullUser;
     try {

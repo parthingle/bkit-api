@@ -1,34 +1,23 @@
 import express from "express";
-import * as Items from "../handlers/itemHandlers";
+
+import db from "../db";
+import ItemHandlers from "../handlers/ItemHandlers";
 
 const itemRouter = express.Router();
+const itemHandlers = new ItemHandlers(db);
 
-itemRouter.get(
-    "/:id",
-    Items.getItem,
+itemRouter.get("/:id", itemHandlers.getItem, (req, res) => {
+    res.status(200).send(res.locals.item);
+    return;
+});
 
-    (req, res) => {
-        res.status(200).send(res.locals.item);
-        return;
-    }
-);
+// We are no longer using this feature
+// itemRouter.post("/", itemHandlers.newItem, (req, res) => {
+//     res.status(200).send(res.locals.newItem.id);
+//     return;
+// });
 
-itemRouter.post(
-    "/",
-    Items.newItem,
-
-    (req, res) => {
-        res.status(200).send(res.locals.newItem.id);
-        return;
-    }
-);
-
-itemRouter.post(
-    "/buck/:id",
-    Items.buckItem,
-
-    (req, res) => {
-        res.status(200).send({ message: "item bucked!" });
-    }
-);
+itemRouter.post("/buck/:id", itemHandlers.buckItem, (req, res) => {
+    res.status(200).send({ message: "item bucked!" });
+});
 export default itemRouter;

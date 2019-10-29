@@ -2,8 +2,9 @@ import passport from "passport";
 import * as JWT from "../auth/jwt";
 import keys from "../config/keys";
 import unless from "express-unless";
-import * as Users from "../db/userFunctions";
 const FacebookTokenStrategy = require("passport-facebook-token");
+
+import db from "../db";
 
 JWT.authenticateUser.unless = unless;
 
@@ -27,7 +28,7 @@ export const verify_callback = async (
 ) => {
     // Use `profile` to get facebook data (profile.id, profile.givenName, etc.)
     let user, err;
-    user = await Users.getProfileFromId(profile.id);
+    user = await db.Users.getProfileFromId(profile.id);
     if (!user) {
         // If User exists in database, set to `user`, otherwise set user to:
         user = {
@@ -44,11 +45,11 @@ export const verify_callback = async (
             friends: []
         };
         try {
-            await Users.createNewUser(user);
+            await db.Users.createNewUser(user);
         } catch (error) {
             err = new Error("Database error!");
         }
     }
-    Users.timestampProfile(user.profileId, "lastLogin");
+    db.Users.timestampProfile(user.profileId, "lastLogin");
     return next(err, user);
 };

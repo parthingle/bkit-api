@@ -1,13 +1,15 @@
 import express from "express";
-import * as Buckets from "../handlers/bucketHandlers";
-import * as Users from "../handlers/userHandlers";
+
+import db from "../db";
+import BucketHandlers from "../handlers/BucketHandlers";
 
 const bucketRouter = express.Router();
+const bucketHandlers = new BucketHandlers(db);
 
 bucketRouter.get(
     "/:id",
-    Buckets.getBucket,
-    Buckets.resolveItems,
+    bucketHandlers.getBucket,
+    bucketHandlers.resolveItems,
     (req, res) => {
         res.status(200).send(res.locals.bucket);
         return;

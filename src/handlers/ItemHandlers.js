@@ -38,7 +38,8 @@ export default class ItemHandlers {
                     "usersWhoBucketed",
                     req.params.id
                 );
-                await db.Users.updateObject(
+
+                await db.Users.setObject(
                     req.auth.id,
                     req.params.id,
                     "myBucketedItems"

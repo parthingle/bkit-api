@@ -1,11 +1,8 @@
 import passport from "passport";
 import * as JWT from "../auth/jwt";
-
-import db from "../db";
 import UserHandlers from "../handlers/UserHandlers";
 
 const ignoreAuthCheckPaths = ["/auth/facebook", "/auth/signup"];
-const userHandlers = new UserHandlers(db);
 
 // Route
 const authRouter = require("express").Router();
@@ -23,7 +20,7 @@ authRouter.post(
 // Expects a user object in `req.params.user`
 authRouter.post(
     "/signup",
-    userHandlers.newUser,
+    UserHandlers.newUser,
     (req, res, next) => {
         // jws.js expects there to be something in req.user so we have to update that field
         req.user = res.locals.newUser;
@@ -40,4 +37,17 @@ authRouter.get("/status", (req, res, next) => {
     res.send(req.user ? 200 : 401);
 });
 
+authRouter.post(
+    "/refresh",
+    UserHandlers.refreshUser,
+    (req, res, next) => {
+        if (req.error.name == "UserNotFoundError") {
+            res.status(401).send({ message: "Refresh Token not valid" });
+        } else {
+            next();
+        }
+    },
+    JWT.generateToken,
+    JWT.sendToken
+);
 module.exports = authRouter;

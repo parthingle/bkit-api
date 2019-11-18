@@ -1,6 +1,7 @@
 import * as Bin from "../bin/completion";
+import db from "../db";
 
-export default class UserHandlers {
+class UserHandlers {
     constructor(db) {
         this.getMyProfile = async (req, res, next) => {
             let user;
@@ -10,6 +11,18 @@ export default class UserHandlers {
                     res.status(404).json({ message: "User not found!" });
                     return;
                 }
+            } catch (error) {
+                next(error);
+                return;
+            }
+            res.locals.user = user;
+            next();
+        };
+
+        this.refreshUser = async (req, res, next) => {
+            let user;
+            try {
+                user = await db.Users.lookupUserByRefreshToken(req.body.rtoken);
             } catch (error) {
                 next(error);
                 return;
@@ -89,3 +102,5 @@ export default class UserHandlers {
         };
     }
 }
+
+export default new UserHandlers(db);

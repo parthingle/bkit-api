@@ -93,3 +93,19 @@ export const setObject = async (uid, iid, field) => {
         return Promise.reject(error);
     }
 };
+
+export const lookupUserByRefreshToken = async rtoken => {
+    let user, userSnapshot;
+    try {
+        userSnapshot = await USERS.where("rtoken", "==", rtoken).get();
+        if (userSnapshot.empty) {
+            const e = new Error("User does not exist");
+            e.name = "UserNotFoundError";
+            throw e;
+        }
+        user = userSnapshot[0].data();
+    } catch (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(user);
+};

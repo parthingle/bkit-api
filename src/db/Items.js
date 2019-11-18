@@ -63,7 +63,7 @@ export const insertIntoArray = async (id, field, iid) => {
             [field]: FieldValue.arrayUnion(id) //check syntax
         });
     } catch (error) {
-        Promise.reject(error);
+        return Promise.reject(error);
     }
     return Promise.resolve(true);
 };

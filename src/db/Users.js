@@ -12,9 +12,8 @@ export const getProfileFromId = async id => {
 };
 
 export const timestampProfile = async (id, field) => {
-    let userSnapshot;
     try {
-        userSnapshot = await USERS.doc(id).update({ [field]: Date.now() });
+        await USERS.doc(id).update({ [field]: Date.now() });
     } catch (error) {
         return Promise.reject(error);
     }
@@ -78,14 +77,16 @@ export const createNewUser = async user => {
 };
 
 export const setObject = async (uid, iid, field) => {
-    let user, userRef, obj;
+    let user, userRef;
     try {
         userRef = USERS.doc(uid);
         user = await userRef.get();
         if (user.exists) {
-            obj = user.data();
-            obj[[field]][[iid]] = Date.now();
-            return userRef.set(obj);
+            let key = `${field}.${iid}`;
+            await userRef.update({
+                [[key]]: new Date().getTime()
+            });
+            return true;
         } else {
             throw new Error("User does not exist");
         }

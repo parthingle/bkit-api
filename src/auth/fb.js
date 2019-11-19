@@ -45,7 +45,7 @@ export const verify_callback = async (
             dateCreated: Date.now(),
             signupComplete: true,
             lastLogin: Date.now(),
-            myBucketedItems: [],
+            myBucketedItems: {},
             friends: [],
             rtoken: rtoken
         };

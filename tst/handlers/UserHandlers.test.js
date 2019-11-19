@@ -9,7 +9,7 @@ describe("UserHandlers", () => {
     let next;
 
     beforeEach(() => {
-        userHandlers = new UserHandlers(db);
+        userHandlers = UserHandlers;
         next = sinon.spy();
     });
 

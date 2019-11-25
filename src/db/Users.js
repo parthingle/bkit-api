@@ -1,4 +1,4 @@
-import { USERS } from "../config/firebase";
+import { FieldValue, USERS } from "../config/firebase";
 
 export const getProfileFromId = async id => {
     let user, userSnapshot;
@@ -119,7 +119,7 @@ export const removeObject = async (uid, iid, field) => {
         if (user.exists) {
             let key = `${field}.${iid}`;
             await userRef.update({
-                [[key]]: null
+                [[key]]: FieldValue.delete()
             });
             return true;
         } else {

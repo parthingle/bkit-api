@@ -110,3 +110,22 @@ export const lookupUserByRefreshToken = async rtoken => {
     }
     return Promise.resolve(user);
 };
+
+export const removeObject = async (uid, iid, field) => {
+    let user, userRef;
+    try {
+        userRef = USERS.doc(uid);
+        user = await userRef.get();
+        if (user.exists) {
+            let key = `${field}.${iid}`;
+            await userRef.update({
+                [[key]]: null
+            });
+            return true;
+        } else {
+            throw new Error("User does not exist");
+        }
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};

@@ -50,5 +50,24 @@ export default class ItemHandlers {
             }
             next();
         };
+
+        this.unbuckItem = async (req, res, next) => {
+            try {
+                await db.Items.removeFromArray(
+                    req.auth.id,
+                    "usersWhoBucketed",
+                    req.params.id
+                );
+                await db.Users.removeObject(
+                    req.auth.id,
+                    req.params.id,
+                    "myBucketedItems"
+                );
+            } catch (error) {
+                next(error);
+                return;
+            }
+            next();
+        };
     }
 }

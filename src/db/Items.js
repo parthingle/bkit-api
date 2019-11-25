@@ -68,15 +68,10 @@ export const insertIntoArray = async (id, field, iid) => {
     return Promise.resolve(true);
 };
 
-export const removeFromArray = async (xid, field, id) => {
-    let itemRef;
+export const removeFromArray = async (uid, field, iid) => {
     try {
-        itemRef = await ITEMS.doc(id).get();
-        if (!itemRef.exists) {
-            return Promise.reject(new Error("Item not found!"));
-        }
-        await itemRef.update({
-            field: FieldValue.arrayRemove(xid)
+        await ITEMS.doc(iid).update({
+            [field]: FieldValue.arrayRemove(uid) //check syntax
         });
     } catch (error) {
         return Promise.reject(error);

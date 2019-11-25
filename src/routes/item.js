@@ -20,4 +20,8 @@ itemRouter.get("/:id", itemHandlers.getItem, (req, res) => {
 itemRouter.post("/buck/:id", itemHandlers.buckItem, (req, res) => {
     res.status(200).send({ message: "item bucked!" });
 });
+
+itemRouter.post("/unbuck/:id", itemHandlers.unbuckItem, (req, res) => {
+    res.status(200).send({ message: "item unbucked!" });
+});
 export default itemRouter;

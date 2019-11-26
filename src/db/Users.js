@@ -76,7 +76,7 @@ export const createNewUser = async user => {
     return Promise.resolve(newUser);
 };
 
-export const setObject = async (uid, iid, field) => {
+export const setObject = async (uid, iid, timestamp, field) => {
     let user, userRef;
     try {
         userRef = USERS.doc(uid);
@@ -84,7 +84,7 @@ export const setObject = async (uid, iid, field) => {
         if (user.exists) {
             let key = `${field}.${iid}`;
             await userRef.update({
-                [[key]]: new Date().getTime()
+                [[key]]: timestamp ? parseInt(timestamp) : Date.now()
             });
             return true;
         } else {

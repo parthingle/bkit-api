@@ -36,12 +36,13 @@ export default class ItemHandlers {
                 await db.Items.insertIntoArray(
                     req.auth.id,
                     "usersWhoBucketed",
-                    req.params.id
+                    req.query.id
                 );
 
                 await db.Users.setObject(
                     req.auth.id,
-                    req.params.id,
+                    req.query.id,
+                    req.query.timestamp,
                     "myBucketedItems"
                 );
             } catch (error) {

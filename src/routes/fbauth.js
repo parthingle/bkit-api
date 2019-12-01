@@ -2,7 +2,11 @@ import passport from "passport";
 import * as JWT from "../auth/jwt";
 import UserHandlers from "../handlers/UserHandlers";
 
-const ignoreAuthCheckPaths = ["/auth/facebook", "/auth/signup"];
+const ignoreAuthCheckPaths = [
+    "/auth/facebook",
+    "/auth/signup",
+    "/auth/refresh"
+];
 
 // Route
 const authRouter = require("express").Router();
@@ -41,7 +45,7 @@ authRouter.post(
     "/refresh",
     UserHandlers.refreshUser,
     (req, res, next) => {
-        if (req.error.name == "UserNotFoundError") {
+        if (req.error) {
             res.status(401).send({ message: "Refresh Token not valid" });
         } else {
             next();

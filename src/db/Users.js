@@ -104,7 +104,9 @@ export const lookupUserByRefreshToken = async rtoken => {
             e.name = "UserNotFoundError";
             throw e;
         }
-        user = userSnapshot[0].data();
+        userSnapshot.forEach(u => {
+            user = u.data();
+        });
     } catch (error) {
         return Promise.reject(error);
     }

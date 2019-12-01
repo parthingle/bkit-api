@@ -8,7 +8,7 @@ import * as FB from "./auth/fb";
 import * as JWT from "./auth/jwt";
 
 // Add endpoint here to test without JWT
-let ignoreAuthCheckPaths = ["/auth/facebook", "/auth/signup"];
+let ignoreAuthCheckPaths = ["/auth/facebook", "/auth/signup", "/auth/refresh"];
 const app = express();
 
 app.set("port", process.env.PORT || 8080);

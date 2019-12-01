@@ -7,6 +7,7 @@
     "author": "TeamBruinmeet",
     "license": "MIT",
     "dependencies": {
+        "@babel/cli": "^7.7.4",
         "@babel/core": "^7.6.4",
         "@babel/node": "^7.6.3",
         "@babel/plugin-transform-runtime": "^7.6.2",
@@ -49,7 +50,7 @@
         ]
     },
     "engines": {
-        "node": "10.15.3"
+        "node": ">=8.0.0"
     },
     "scripts": {
         "start": "node_modules/.bin/nodemon app.js --exec babel-node --",
@@ -58,8 +59,8 @@
         "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test",
         "prepackage-functions": "rimraf functions",
         "package-functions": "babel '.' --out-dir 'functions' --copy-files --ignore node_modules,.git,.gitignore",
-        "postpackage-functions": "cd functions && npm install",
-        "deploy": "yarn package-functions && gcloud functions deploy app --trigger-http --runtime nodejs8"
+        "postpackage-functions": "cd functions && yarn",
+        "deploy": "yarn package-functions && cd functions/ && gcloud functions deploy api --trigger-http --runtime nodejs8"
     },
     "devDependencies": {
         "babel-plugin-istanbul": "^5.2.0"

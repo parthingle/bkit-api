@@ -17,11 +17,11 @@ itemRouter.get("/:id", itemHandlers.getItem, (req, res) => {
 //     return;
 // });
 
-itemRouter.post("/buck/:id", itemHandlers.buckItem, (req, res) => {
+itemRouter.post("/buck", itemHandlers.buckItem, (req, res) => {
     res.status(200).send({ message: "item bucked!" });
 });
 
-itemRouter.post("/unbuck/:id", itemHandlers.unbuckItem, (req, res) => {
+itemRouter.post("/unbuck", itemHandlers.unbuckItem, (req, res) => {
     res.status(200).send({ message: "item unbucked!" });
 });
 

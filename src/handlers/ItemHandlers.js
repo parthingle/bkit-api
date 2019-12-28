@@ -70,5 +70,16 @@ export default class ItemHandlers {
             }
             next();
         };
+
+        this.getCoords = async (req, res, next) => {
+            let allItems;
+            try {
+                allItems = await db.Items.getAll();
+                res.locals.data = allItems.map(i => i.coordinates);
+                next();
+            } catch (error) {
+                next(error);
+            }
+        };
     }
 }

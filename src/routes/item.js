@@ -24,4 +24,8 @@ itemRouter.post("/buck", itemHandlers.buckItem, (req, res) => {
 itemRouter.post("/unbuck/:id", itemHandlers.unbuckItem, (req, res) => {
     res.status(200).send({ message: "item unbucked!" });
 });
+
+itemRouter.get("/coords/:id", itemHandlers.getCoords, (req, res) => {
+    res.status(200).send(res.locals.data);
+});
 export default itemRouter;

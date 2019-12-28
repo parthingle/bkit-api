@@ -1,10 +1,9 @@
 import * as admin from "firebase-admin";
 import keys from "./keys";
-import serviceAccount from "./serviceAccountKey.json";
+var serviceAccountKey = require(process.env.PATH_TO_SERVICE_ACCOUNT_KEY);
 
-// TODO: Use database from environment variables instead of being hardcoded
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccountKey),
     databaseURL: keys.DATABASE_URL
 });
 

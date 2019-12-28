@@ -19,6 +19,7 @@
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
         "cross-env": "^6.0.3",
+        "dotenv": "^8.2.0",
         "express": "^4.16.4",
         "express-jwt": "^5.3.1",
         "express-unless": "^0.5.0",
@@ -60,7 +61,7 @@
         "prepackage-functions": "rimraf functions",
         "package-functions": "babel '.' --out-dir 'functions' --copy-files --ignore node_modules,.git,.gitignore",
         "postpackage-functions": "cd functions && yarn",
-        "deploy": "yarn package-functions && cd functions/ && gcloud functions deploy api --trigger-http --runtime nodejs8"
+        "deploy": "yarn package-functions && cp .env.yaml functions/ && cd functions/ && gcloud functions deploy api --trigger-http --runtime nodejs8 --env-vars-file .env.yaml"
     },
     "devDependencies": {
         "babel-plugin-istanbul": "^5.2.0"

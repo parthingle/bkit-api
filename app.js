@@ -2,6 +2,7 @@
 const app = require("./src/index.js");
 const httpServer = require("http").Server(app);
 const functions = require("firebase-functions");
+require("dotenv").config();
 
 httpServer.listen(app.get("port"), () => {
     console.log("Listening on port: ", app.get("port"));

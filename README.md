@@ -140,3 +140,55 @@ HEADERS:
 `401`: Invalid jwtoken
 
 `500`: Server Error
+
+------------------------------------------------------------------------------------
+
+5. Buck Item
+
+
+`POST /api/item/buck/:id`
+
+"Buck" Item
+
+
+### Required params:
+* n/a 
+
+HEADERS:
+* `"x-auth-token": jwtoken
+
+### Response:
+`200`: 
+
+```{ message: "item bucked!" }```
+
+
+`401`: Invalid jwtoken
+
+`500`: Server Error
+
+------------------------------------------------------------------------------------
+
+5.Unbuck Item
+
+
+`POST /api/item/unbuck/:id`
+
+"Unbuck" Item
+
+
+### Required params:
+* n/a 
+
+HEADERS:
+* `"x-auth-token": jwtoken`
+
+### Response:
+`200`: 
+
+```{ message: "item unbucked!" }```
+
+
+`401`: Invalid jwtoken
+
+`500`: Server Error

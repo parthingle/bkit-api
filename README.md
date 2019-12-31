@@ -18,13 +18,16 @@ Logs you in if you have an account, creates an account and then logs you in if y
 Account creation involves creation of a refresh token
 
 ### Required params: 
-* `access_token`: Facebook access token
+* `access_token`: `Facebook access token`
 
 ### Response: 
-`200`: {
+`200`: 
+```
+{
   "jwtoken": Short lived irrevokable token to securely communicate with server,
   "rtoken": Long lived revokable token to regenerated jwtoken
 }
+```
 
 `401`: Invalid Facebook access token
 
@@ -33,19 +36,22 @@ Account creation involves creation of a refresh token
 ------------------------------------------------------------------------------------
 2. Refresh JWT 
   
-`POST /api/auth/signup`
+`POST /api/auth/refresh`
 
 Refreshes your jwtoken with a valid refresh token
 
 
 ### Required params:
-* `rtoken`: Server refresh token
+* `rtoken`: `Server refresh token`
 
 ### Response:
-`200`: {
+`200`: 
+```
+{
   "jwtoken": Short lived irrevokable token to securely communicate with server,
   "rtoken": Long lived revokable token to regenerated jwtoken
 }
+```
 
 `401`: Invalid Refresh access token
 
@@ -63,7 +69,7 @@ Gives you your profile data. Ids you with the jwtoken.
 * n/a 
 
 HEADERS:
-* `"x-auth-token": jwtoken
+* `"x-auth-token"`: `jwtoken`
 
 ### Response:
 `200`: 
@@ -104,7 +110,7 @@ Gives you your profile data. Ids you with the jwtoken.
 * n/a 
 
 HEADERS:
-* `"x-auth-token": jwtoken
+* `"x-auth-token`: `jwtoken`
 
 ### Response:
 `200`: 
@@ -146,7 +152,7 @@ HEADERS:
 5. Buck Item
 
 
-`POST /api/item/buck/:id`
+`POST /api/item/buck?id=&timestamp=`
 
 "Buck" Item
 
@@ -155,7 +161,7 @@ HEADERS:
 * n/a 
 
 HEADERS:
-* `"x-auth-token": jwtoken
+* `"x-auth-token"`: `jwtoken`
 
 ### Response:
 `200`: 
@@ -172,7 +178,7 @@ HEADERS:
 5.Unbuck Item
 
 
-`POST /api/item/unbuck/:id`
+`POST /api/item/unbuck?id=`
 
 "Unbuck" Item
 
@@ -181,7 +187,7 @@ HEADERS:
 * n/a 
 
 HEADERS:
-* `"x-auth-token": jwtoken`
+* `"x-auth-token"`: `jwtoken`
 
 ### Response:
 `200`: 

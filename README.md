@@ -152,7 +152,7 @@ HEADERS:
 5. Buck Item
 
 
-`POST /api/item/buck?id=&timestamp=`
+`POST /api/item/buck?id=${id}&timestamp=${timestamp}`
 
 "Buck" Item
 
@@ -178,7 +178,7 @@ HEADERS:
 5.Unbuck Item
 
 
-`POST /api/item/unbuck?id=`
+`POST /api/item/unbuck?id=${id}`
 
 "Unbuck" Item
 
